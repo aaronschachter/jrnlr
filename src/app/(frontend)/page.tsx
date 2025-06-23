@@ -1,7 +1,6 @@
 import { headers as getHeaders } from 'next/headers.js'
 import { getPayload } from 'payload'
 import React from 'react'
-import { fileURLToPath } from 'url'
 
 import config from '@/payload.config'
 import './styles.css'
@@ -14,6 +13,7 @@ export default async function HomePage() {
   const { user } = await payload.auth({ headers })
 
   let recentEntries = null
+
   if (user) {
     recentEntries = await payload.find({
       collection: 'journal-entries',
@@ -24,46 +24,53 @@ export default async function HomePage() {
       },
       sort: '-date',
       limit: 5,
-      depth: 1, // Include journal name
+      depth: 1,
     })
-    console.dir(recentEntries, { depth: null })
   }
 
   return (
     <div className="home">
       <div className="content">
-        <div className="actions">
-          <Link className="new-entry" href="/admin/collections/journal-entries/create">
-            ➕ New Journal Entry
-          </Link>
-        </div>
-
-        {!user && <h1>Welcome to your new project.</h1>}
+        {!user && (
+          <div className="actions">
+            <Link className="new-entry" href="/admin/login">
+              Login
+            </Link>
+          </div>
+        )}
 
         {user && (
-          <div className="recent-entries">
-            <h2>Recent Journal Entries</h2>
-            {recentEntries &&
-              recentEntries.docs.map((entry, idx) => (
-                <div key={idx} className="entry-card">
-                  <div className="entry-date">
-                    {new Date(entry.date).toLocaleDateString(undefined, {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
-                  </div>
+          <>
+            <div className="actions">
+              <Link className="new-entry" href="/admin/collections/journal-entries/create">
+                ➕ New Journal Entry
+              </Link>
+            </div>
 
-                  <div className="entry-journal">
-                    {typeof entry.journal === 'object' && 'title' in entry.journal
-                      ? entry.journal.title
-                      : ''}
-                  </div>
+            <div className="recent-entries">
+              <h2>Recent Journal Entries</h2>
+              {recentEntries &&
+                recentEntries.docs.map((entry, idx) => (
+                  <div key={idx} className="entry-card">
+                    <div className="entry-date">
+                      {new Date(entry.date).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}
+                    </div>
 
-                  <div className="entry-summary">{entry.summary || 'No summary'}</div>
-                </div>
-              ))}
-          </div>
+                    <div className="entry-journal">
+                      {typeof entry.journal === 'object' && 'title' in entry.journal
+                        ? entry.journal.title
+                        : ''}
+                    </div>
+
+                    <div className="entry-summary">{entry.summary || 'No summary'}</div>
+                  </div>
+                ))}
+            </div>
+          </>
         )}
       </div>
     </div>
