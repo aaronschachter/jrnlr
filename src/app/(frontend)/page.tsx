@@ -1,11 +1,11 @@
 import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import React from 'react'
 import { fileURLToPath } from 'url'
 
 import config from '@/payload.config'
 import './styles.css'
+import Link from 'next/link'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -13,46 +13,58 @@ export default async function HomePage() {
   const payload = await getPayload({ config: payloadConfig })
   const { user } = await payload.auth({ headers })
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  let recentEntries = null
+  if (user) {
+    recentEntries = await payload.find({
+      collection: 'journal-entries',
+      where: {
+        user: {
+          equals: user.id,
+        },
+      },
+      sort: '-date',
+      limit: 5,
+      depth: 1, // Include journal name
+    })
+    console.dir(recentEntries, { depth: null })
+  }
 
   return (
     <div className="home">
       <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
+        <div className="actions">
+          <Link className="new-entry" href="/admin/collections/journal-entries/create">
+            ➕ New Journal Entry
+          </Link>
         </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
+
+        {!user && <h1>Welcome to your new project.</h1>}
+
+        {user && (
+          <div className="recent-entries">
+            <h2>Recent Journal Entries</h2>
+            {recentEntries &&
+              recentEntries.docs.map((entry, idx) => (
+                <div key={idx} className="entry-card">
+                  <div className="entry-date">
+                    {new Date(entry.date).toLocaleDateString(undefined, {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </div>
+
+                  <div className="entry-journal">
+                    {typeof entry.journal === 'object' && 'title' in entry.journal
+                      ? entry.journal.title
+                      : ''}
+                  </div>
+
+                  <div className="entry-summary">{entry.summary || 'No summary'}</div>
+                </div>
+              ))}
+          </div>
+        )}
       </div>
     </div>
   )

@@ -98,7 +98,6 @@ svg {
   padding: 45px;
   max-width: 1024px;
   margin: 0 auto;
-  overflow: hidden;
 
   @media (max-width: 400px) {
     padding: 24px;
@@ -161,4 +160,56 @@ svg {
       border-radius: 4px;
     }
   }
+}
+
+.actions {
+  margin: 20px 0;
+}
+
+.new-entry {
+  display: inline-block;
+  background: #66d9ef;
+  color: black;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.new-entry:hover {
+  background: #52c0db;
+}
+
+.recent-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.entry-card {
+  background: #1e1e1e;
+  border-radius: 8px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.entry-date {
+  font-weight: bold;
+  color: #66d9ef;
+  margin-bottom: 6px;
+}
+
+.entry-journal {
+  display: inline-block;
+  background: #333;
+  color: #ccc;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.entry-summary {
+  color: #eee;
 }
