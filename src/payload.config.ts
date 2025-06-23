@@ -22,6 +22,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: '| jrnlr',
+    },
   },
   collections: [Journals, JournalEntries, Media, Users],
   editor: defaultLexical,
