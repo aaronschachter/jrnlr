@@ -33,8 +33,8 @@ export default async function HomePage() {
       <div className="content">
         {!user && (
           <div className="actions">
-            <Link className="new-entry" href="/admin/login">
-              Login
+            <Link className="new-entry" href="/admin/collections/journal-entries/create">
+              ➕ New Journal Entry
             </Link>
           </div>
         )}
