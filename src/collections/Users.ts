@@ -7,7 +7,13 @@ export const Users: CollectionConfig = {
   },
   auth: true,
   fields: [
-    // Email added by default
-    // Add more fields as needed
+    {
+      name: 'bio',
+      type: 'richText',
+      required: false,
+      admin: {
+        description: 'Optional description of the journal author.',
+      },
+    },
   ],
 }

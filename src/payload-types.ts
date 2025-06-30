@@ -152,6 +152,24 @@ export interface Journal {
  */
 export interface User {
   id: string;
+  /**
+   * Optional description of the journal author.
+   */
+  bio?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -325,6 +343,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  bio?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
