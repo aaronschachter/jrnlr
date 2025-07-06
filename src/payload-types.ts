@@ -188,8 +188,8 @@ export interface User {
 export interface JournalEntry {
   id: string;
   user: string | User;
-  journal: string | Journal;
   date: string;
+  journal: string | Journal;
   /**
    * Your journal entry for the day. Feel free to reflect freely, or just jot down some quick notes or highlights.
    */
@@ -313,8 +313,8 @@ export interface JournalsSelect<T extends boolean = true> {
  */
 export interface JournalEntriesSelect<T extends boolean = true> {
   user?: T;
-  journal?: T;
   date?: T;
+  journal?: T;
   content?: T;
   summary?: T;
   updatedAt?: T;

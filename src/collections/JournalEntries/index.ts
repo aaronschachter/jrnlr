@@ -23,15 +23,6 @@ export const JournalEntries: CollectionConfig = {
       },
     },
     {
-      name: 'journal',
-      type: 'relationship',
-      relationTo: 'journals',
-      required: true,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
       name: 'date',
       type: 'date',
       required: true,
@@ -41,6 +32,12 @@ export const JournalEntries: CollectionConfig = {
           pickerAppearance: 'dayAndTime',
         },
       },
+    },
+    {
+      name: 'journal',
+      type: 'relationship',
+      relationTo: 'journals',
+      required: true,
     },
     {
       name: 'content',
