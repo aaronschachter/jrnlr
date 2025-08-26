@@ -18,7 +18,7 @@ export default async function HomePage() {
     recentEntries = await payload.find({
       collection: 'journal-entries',
       where: {
-        user: {
+        createdBy: {
           equals: user.id,
         },
       },
