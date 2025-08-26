@@ -1,4 +1,4 @@
-import { populateUser } from '@/hooks/populateUser'
+import { createdByField } from '@/fields/createdBy'
 import type { CollectionConfig } from 'payload'
 
 export const Journals: CollectionConfig = {
@@ -14,19 +14,7 @@ export const Journals: CollectionConfig = {
       type: 'text',
       required: true,
     },
-    {
-      name: 'user',
-      type: 'relationship',
-      relationTo: 'users',
-      required: true,
-      defaultValue: ({ user }) => user?.id,
-      hooks: {
-        beforeChange: [populateUser],
-      },
-      admin: {
-        hidden: true,
-      },
-    },
+    createdByField(),
     {
       name: 'description',
       type: 'richText',

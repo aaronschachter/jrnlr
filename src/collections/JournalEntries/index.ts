@@ -1,6 +1,6 @@
-import { populateUser } from '@/hooks/populateUser'
 import type { CollectionConfig } from 'payload'
 import { generateSummary } from './hooks/generateSummary'
+import { createdByField } from '@/fields/createdBy'
 
 export const JournalEntries: CollectionConfig = {
   slug: 'journal-entries',
@@ -9,19 +9,7 @@ export const JournalEntries: CollectionConfig = {
     defaultColumns: ['date', 'journal', 'summary'],
   },
   fields: [
-    {
-      name: 'user',
-      type: 'relationship',
-      relationTo: 'users',
-      required: true,
-      admin: {
-        hidden: true,
-      },
-      defaultValue: ({ user }) => user?.id,
-      hooks: {
-        beforeChange: [populateUser],
-      },
-    },
+    createdByField(),
     {
       name: 'date',
       type: 'date',

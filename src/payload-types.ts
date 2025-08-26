@@ -67,20 +67,28 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    documents: Document;
     journals: Journal;
     'journal-entries': JournalEntry;
     media: Media;
+    projects: Project;
+    quotes: Quote;
     users: User;
+    vendors: Vendor;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
+    documents: DocumentsSelect<false> | DocumentsSelect<true>;
     journals: JournalsSelect<false> | JournalsSelect<true>;
     'journal-entries': JournalEntriesSelect<false> | JournalEntriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    quotes: QuotesSelect<false> | QuotesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    vendors: VendorsSelect<false> | VendorsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -119,32 +127,28 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "journals".
+ * via the `definition` "documents".
  */
-export interface Journal {
+export interface Document {
   id: string;
   title: string;
-  user: string | User;
-  /**
-   * Optional description of what this journal is for — e.g., a gratitude journal, work tracker, or personal project log.
-   */
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+  createdBy: string | User;
+  project?: (string | null) | Project;
+  notes?: string | null;
   updatedAt: string;
   createdAt: string;
+  /**
+   * Link to Dropbox/Google Drive/etc if not uploading directly
+   */
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -183,11 +187,91 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: string;
+  title: string;
+  createdBy: string | User;
+  scope: 'major' | 'minor';
+  description?: string | null;
+  warranty?: string | null;
+  completedOn?: string | null;
+  vendor?: (string | null) | Vendor;
+  cost?: number | null;
+  attachments?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "vendors".
+ */
+export interface Vendor {
+  id: string;
+  name: string;
+  createdBy: string | User;
+  phone?: string | null;
+  email?: string | null;
+  url?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "journals".
+ */
+export interface Journal {
+  id: string;
+  title: string;
+  createdBy: string | User;
+  /**
+   * Optional description of what this journal is for — e.g., a gratitude journal, work tracker, or personal project log.
+   */
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "journal-entries".
  */
 export interface JournalEntry {
   id: string;
-  user: string | User;
+  createdBy: string | User;
   date: string;
   journal: string | Journal;
   /**
@@ -214,22 +298,19 @@ export interface JournalEntry {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
+ * via the `definition` "quotes".
  */
-export interface Media {
+export interface Quote {
   id: string;
-  alt: string;
+  createdBy: string | User;
+  title?: string | null;
+  project: string | Project;
+  submittedBy: string | Vendor;
+  submittedOn: string;
+  estimatedCost: number;
+  attachments?: (string | Media)[] | null;
   updatedAt: string;
   createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -238,6 +319,10 @@ export interface Media {
 export interface PayloadLockedDocument {
   id: string;
   document?:
+    | ({
+        relationTo: 'documents';
+        value: string | Document;
+      } | null)
     | ({
         relationTo: 'journals';
         value: string | Journal;
@@ -251,8 +336,20 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
+        relationTo: 'projects';
+        value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'quotes';
+        value: string | Quote;
+      } | null)
+    | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'vendors';
+        value: string | Vendor;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -298,11 +395,32 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents_select".
+ */
+export interface DocumentsSelect<T extends boolean = true> {
+  title?: T;
+  createdBy?: T;
+  project?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "journals_select".
  */
 export interface JournalsSelect<T extends boolean = true> {
   title?: T;
-  user?: T;
+  createdBy?: T;
   description?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -312,7 +430,7 @@ export interface JournalsSelect<T extends boolean = true> {
  * via the `definition` "journal-entries_select".
  */
 export interface JournalEntriesSelect<T extends boolean = true> {
-  user?: T;
+  createdBy?: T;
   date?: T;
   journal?: T;
   content?: T;
@@ -340,6 +458,38 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  createdBy?: T;
+  scope?: T;
+  description?: T;
+  warranty?: T;
+  completedOn?: T;
+  vendor?: T;
+  cost?: T;
+  attachments?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "quotes_select".
+ */
+export interface QuotesSelect<T extends boolean = true> {
+  createdBy?: T;
+  title?: T;
+  project?: T;
+  submittedBy?: T;
+  submittedOn?: T;
+  estimatedCost?: T;
+  attachments?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -353,6 +503,19 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "vendors_select".
+ */
+export interface VendorsSelect<T extends boolean = true> {
+  name?: T;
+  createdBy?: T;
+  phone?: T;
+  email?: T;
+  url?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
