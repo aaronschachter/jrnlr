@@ -31,10 +31,6 @@ export const JournalEntries: CollectionConfig = {
       name: 'content',
       type: 'richText',
       required: true,
-      admin: {
-        description:
-          'Your journal entry for the day. Feel free to reflect freely, or just jot down some quick notes or highlights.',
-      },
     },
     {
       name: 'summary',
@@ -43,6 +39,7 @@ export const JournalEntries: CollectionConfig = {
         position: 'sidebar',
         condition: (_, siblingData) => Boolean(siblingData?.summary),
         readOnly: true,
+        rows: 6,
       },
     },
   ],

@@ -73,6 +73,7 @@ export interface Config {
     media: Media;
     projects: Project;
     quotes: Quote;
+    todos: Todo;
     users: User;
     vendors: Vendor;
     'payload-locked-documents': PayloadLockedDocument;
@@ -87,6 +88,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     quotes: QuotesSelect<false> | QuotesSelect<true>;
+    todos: TodosSelect<false> | TodosSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     vendors: VendorsSelect<false> | VendorsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -281,9 +283,6 @@ export interface JournalEntry {
   createdBy: string | User;
   date: string;
   journal: string | Journal;
-  /**
-   * Your journal entry for the day. Feel free to reflect freely, or just jot down some quick notes or highlights.
-   */
   content: {
     root: {
       type: string;
@@ -321,6 +320,34 @@ export interface Quote {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "todos".
+ */
+export interface Todo {
+  id: string;
+  title: string;
+  createdBy: string | User;
+  journal?: (string | null) | Journal;
+  project?: (string | null) | Project;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -349,6 +376,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'quotes';
         value: string | Quote;
+      } | null)
+    | ({
+        relationTo: 'todos';
+        value: string | Todo;
       } | null)
     | ({
         relationTo: 'users';
@@ -492,6 +523,19 @@ export interface QuotesSelect<T extends boolean = true> {
   submittedOn?: T;
   estimatedCost?: T;
   attachments?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "todos_select".
+ */
+export interface TodosSelect<T extends boolean = true> {
+  title?: T;
+  createdBy?: T;
+  journal?: T;
+  project?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }

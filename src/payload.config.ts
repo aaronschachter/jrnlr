@@ -12,6 +12,7 @@ import { Journals } from './collections/Journals'
 import { Projects } from './collections/Projects'
 import { Documents } from './collections/Documents'
 import { JournalEntries } from './collections/JournalEntries'
+import { Todos } from './collections/Todos'
 import { defaultLexical } from './fields/defaultLexical'
 
 const filename = fileURLToPath(import.meta.url)
@@ -28,7 +29,17 @@ export default buildConfig({
       titleSuffix: '| jrnlr',
     },
   },
-  collections: [Documents, Journals, JournalEntries, Media, Projects, Quotes, Users, Vendors],
+  collections: [
+    Documents,
+    Journals,
+    JournalEntries,
+    Media,
+    Projects,
+    Quotes,
+    Todos,
+    Users,
+    Vendors,
+  ],
   editor: defaultLexical,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
