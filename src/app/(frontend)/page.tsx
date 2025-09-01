@@ -1,10 +1,9 @@
-import { headers as getHeaders } from 'next/headers.js'
+import { headers as getHeaders } from 'next/headers'
 import { getPayload } from 'payload'
 import React from 'react'
-
 import config from '@/payload.config'
-import './styles.css'
 import Link from 'next/link'
+import Dashboard from './dashboard/Dashboard'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -12,67 +11,18 @@ export default async function HomePage() {
   const payload = await getPayload({ config: payloadConfig })
   const { user } = await payload.auth({ headers })
 
-  let recentEntries = null
-
-  if (user) {
-    recentEntries = await payload.find({
-      collection: 'journal-entries',
-      where: {
-        createdBy: {
-          equals: user.id,
-        },
-      },
-      sort: '-date',
-      limit: 5,
-      depth: 1,
-    })
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh] p-6">
+        <Link
+          className="px-4 py-2 rounded bg-gray-900 text-white hover:bg-gray-800"
+          href="/admin/login?redirect=/"
+        >
+          Login
+        </Link>
+      </div>
+    )
   }
 
-  return (
-    <div className="home">
-      <div className="content">
-        {!user && (
-          <div className="actions">
-            <Link className="new-entry" href="/admin/collections/journal-entries/create">
-              ➕ New Journal Entry
-            </Link>
-          </div>
-        )}
-
-        {user && (
-          <>
-            <div className="actions">
-              <Link className="new-entry" href="/admin/collections/journal-entries/create">
-                ➕ New Journal Entry
-              </Link>
-            </div>
-
-            <div className="recent-entries">
-              <h2>Recent Journal Entries</h2>
-              {recentEntries &&
-                recentEntries.docs.map((entry, idx) => (
-                  <div key={idx} className="entry-card">
-                    <div className="entry-date">
-                      {new Date(entry.date).toLocaleDateString(undefined, {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
-                    </div>
-
-                    <div className="entry-journal">
-                      {typeof entry.journal === 'object' && 'title' in entry.journal
-                        ? entry.journal.title
-                        : ''}
-                    </div>
-
-                    <div className="entry-summary">{entry.summary || 'No summary'}</div>
-                  </div>
-                ))}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  )
+  return <Dashboard />
 }
