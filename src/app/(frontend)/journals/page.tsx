@@ -1,18 +1,28 @@
 import Link from 'next/link'
+import { getPayload } from 'payload'
+import config from '@/payload.config'
 
-type Journal = { id: string; title: string; count?: number }
-
-// TODO: replace with Payload fetch:
-// const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/journals?limit=50`, { cache: 'no-store' })
-async function getJournals(): Promise<Journal[]> {
-  return [
-    { id: 'gratitude', title: 'Gratitude', count: 124 },
-    { id: 'work-log', title: 'Work Log', count: 57 },
-  ]
+type Journal = {
+  id: string
+  title?: string
+  // add other fields if you have them
 }
 
+export const dynamic = 'force-dynamic' // or use revalidate if you prefer
+
 export default async function JournalsPage() {
-  const journals = await getJournals()
+  const payload = await getPayload({ config })
+
+  const { docs } = await payload.find({
+    collection: 'journals',
+    depth: 0,
+    limit: 50,
+    pagination: true,
+    sort: '-updatedAt',
+  })
+
+  const journals = docs as Journal[]
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-4">Journals</h1>
@@ -22,12 +32,9 @@ export default async function JournalsPage() {
             key={j.id}
             className="flex items-center justify-between rounded-md border bg-card px-4 py-3"
           >
-            <Link className="font-medium hover:underline" href={`/journals/${j.id}`}>
-              {j.title}
+            <Link href={`/journals/${j.id}`} className="font-medium hover:underline">
+              {j.title ?? '(untitled)'}
             </Link>
-            {j.count != null && (
-              <span className="text-sm text-muted-foreground">{j.count} entries</span>
-            )}
           </li>
         ))}
       </ul>
