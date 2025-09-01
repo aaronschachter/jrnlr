@@ -1,8 +1,6 @@
-// postcss.config.mjs
-const config = {
+// Tailwind v4 PostCSS config (CommonJS)
+module.exports = {
   plugins: {
     '@tailwindcss/postcss': {},
   },
 }
-
-export default config
