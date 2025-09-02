@@ -1,7 +1,14 @@
-"use client"
+'use client'
 
 import React from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 export default function JournalFilter({
   journals,
@@ -10,12 +17,13 @@ export default function JournalFilter({
   journals: Array<{ id: string; title: string }>
   selectedId?: string
 }) {
+  const ALL_VALUE = '__all__'
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  function onChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    const id = e.target.value
+  function onValueChange(id: string) {
     const params = new URLSearchParams(searchParams?.toString())
+
     if (!id) {
       params.delete('journal')
     } else {
@@ -26,18 +34,23 @@ export default function JournalFilter({
   }
 
   return (
-    <select
-      className="border rounded px-2 py-1 text-sm"
-      value={selectedId || ''}
-      onChange={onChange}
+    <Select
+      value={selectedId ?? ALL_VALUE}
+      onValueChange={(val) => onValueChange(val === ALL_VALUE ? '' : val)}
     >
-      <option value="">All journals</option>
-      {journals.map(j => (
-        <option key={j.id} value={j.id}>
-          {j.title}
-        </option>
-      ))}
-    </select>
+      <SelectTrigger size="sm" className="w-48">
+        <SelectValue placeholder="All journals" className="truncate" />
+      </SelectTrigger>
+
+      <SelectContent>
+        <SelectItem value={ALL_VALUE}>All journals</SelectItem>
+
+        {journals.map((j) => (
+          <SelectItem key={j.id} value={j.id}>
+            {j.title ?? '(No title)'}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }
-
