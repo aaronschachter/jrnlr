@@ -6,6 +6,7 @@ import config from '@/payload.config'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import JournalEntries from './journals/JournalEntries'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -13,20 +14,14 @@ export default async function HomePage() {
   const payload = await getPayload({ config: payloadConfig })
   const { user } = await payload.auth({ headers })
 
-  let recentEntries = null
+  const recentEntries = null
 
   if (user) {
-    recentEntries = await payload.find({
-      collection: 'journal-entries',
-      where: {
-        createdBy: {
-          equals: user.id,
-        },
-      },
-      sort: '-date',
-      limit: 5,
-      depth: 1,
-    })
+    return (
+      <div className="p-8">
+        <JournalEntries userId={user.id} />
+      </div>
+    )
   }
 
   return (
