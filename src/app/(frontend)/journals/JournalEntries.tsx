@@ -27,8 +27,9 @@ export default async function JournalEntries({ userId }: Props) {
   })
 
   return (
-    <div className="recent-entries">
-      <h2 className="text-lg font-semibold mb-3">Recent Journal Entries</h2>
+    <div>
+      <h2 className="text-lg font-semibold mb-3">Journals</h2>
+
       {recentEntries.docs.map((entry, idx) => (
         <Card key={idx} className="mb-3">
           <CardHeader className="flex flex-row items-start justify-between gap-2">
@@ -40,18 +41,21 @@ export default async function JournalEntries({ userId }: Props) {
                   year: 'numeric',
                 })}
               </CardTitle>
+
               <CardDescription>
                 {typeof entry.journal === 'object' && 'title' in entry.journal
                   ? entry.journal.title
                   : ''}
               </CardDescription>
             </div>
+
             {'id' in entry && (
               <Button variant="ghost" size="sm" asChild>
-                <Link href={`/admin/collections/journal-entries/${(entry as any).id}`}>Open</Link>
+                <Link href={`/admin/collections/journal-entries/${entry.id}`}>Open</Link>
               </Button>
             )}
           </CardHeader>
+
           <CardContent>
             <p className="text-sm text-muted-foreground">{entry.summary || 'No summary'}</p>
           </CardContent>
