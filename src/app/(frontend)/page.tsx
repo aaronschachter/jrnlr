@@ -3,7 +3,6 @@ import { getPayload } from 'payload'
 import React from 'react'
 
 import config from '@/payload.config'
-import './styles.css'
 import Link from 'next/link'
 
 export default async function HomePage() {
@@ -32,19 +31,15 @@ export default async function HomePage() {
     <div className="home">
       <div className="content">
         {!user && (
-          <div className="actions">
-            <Link className="new-entry" href="/admin/collections/journal-entries/create">
-              ➕ New Journal Entry
-            </Link>
+          <div className="p-4">
+            <Link href="/admin/login?redirect=/">Login</Link>
           </div>
         )}
 
         {user && (
-          <>
+          <div className="p-4">
             <div className="actions">
-              <Link className="new-entry" href="/admin/collections/journal-entries/create">
-                ➕ New Journal Entry
-              </Link>
+              <Link href="/admin/collections/journal-entries/create">➕ New Journal Entry</Link>
             </div>
 
             <div className="recent-entries">
@@ -70,7 +65,7 @@ export default async function HomePage() {
                   </div>
                 ))}
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
