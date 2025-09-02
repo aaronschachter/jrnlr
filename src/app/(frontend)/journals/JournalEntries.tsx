@@ -4,8 +4,8 @@ import React from 'react'
 import config from '@/payload.config'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import JournalFilter from './JournalFilter'
+import JournalEntryItem from './JournalEntryItem'
 
 type Props = {
   userId: string
@@ -68,35 +68,7 @@ export default async function JournalEntries({ userId, journalIdFromSearch }: Pr
       </div>
 
       {recentEntries.docs.map((entry, idx) => (
-        <Card key={idx} className="mb-3">
-          <CardHeader className="flex flex-row items-start justify-between gap-2">
-            <div>
-              <CardTitle>
-                {new Date(entry.date).toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </CardTitle>
-
-              <CardDescription>
-                {typeof entry.journal === 'object' && 'title' in entry.journal
-                  ? entry.journal.title
-                  : ''}
-              </CardDescription>
-            </div>
-
-            {'id' in entry && (
-              <Button variant="ghost" size="sm" asChild>
-                <Link href={`/admin/collections/journal-entries/${entry.id}`}>Open</Link>
-              </Button>
-            )}
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-sm text-muted-foreground">{entry.summary || 'No summary'}</p>
-          </CardContent>
-        </Card>
+        <JournalEntryItem key={idx} entry={entry} />
       ))}
     </div>
   )
