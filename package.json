@@ -21,9 +21,13 @@
     "@payloadcms/richtext-lexical": "3.53.0",
     "@payloadcms/storage-vercel-blob": "^3.53.0",
     "@payloadcms/ui": "3.53.0",
+    "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/postcss": "^4.1.12",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "cross-env": "^10.0.0",
     "graphql": "^16.11.0",
+    "lucide-react": "^0.542.0",
     "next": "15.5.0",
     "openai": "^5.15.0",
     "payload": "3.53.0",
@@ -31,6 +35,7 @@
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "sharp": "0.34.3",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.12"
   },
   "devDependencies": {
@@ -41,6 +46,7 @@
     "eslint": "^9.34.0",
     "eslint-config-next": "15.5.0",
     "prettier": "^3.6.2",
+    "tw-animate-css": "^1.3.7",
     "typescript": "5.9.2"
   },
   "engines": {
