@@ -26,6 +26,12 @@ export const JournalEntries: CollectionConfig = {
       type: 'relationship',
       relationTo: 'journals',
       required: true,
+      defaultValue: ({ req }) => {
+        const qp = (req as any)?.query || {}
+        const fromQuery = qp?.journal || qp?.journalId
+        if (Array.isArray(fromQuery)) return fromQuery[0]
+        return fromQuery || undefined
+      },
     },
     {
       name: 'content',

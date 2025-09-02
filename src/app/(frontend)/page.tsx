@@ -7,8 +7,15 @@ import Link from 'next/link'
 import JournalEntries from './journals/JournalEntries'
 import { Button } from '@/components/ui/button'
 
-export default async function HomePage() {
+type PageProps = {
+  searchParams: Promise<{
+    journal?: string
+  }>
+}
+
+export default async function HomePage({ searchParams }: PageProps) {
   const headers = await getHeaders()
+  const sp = await searchParams
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
   const { user } = await payload.auth({ headers })
@@ -16,7 +23,7 @@ export default async function HomePage() {
   if (user) {
     return (
       <div className="p-8">
-        <JournalEntries userId={user.id} />
+        <JournalEntries userId={user.id} journalIdFromSearch={sp?.journal} />
       </div>
     )
   }
