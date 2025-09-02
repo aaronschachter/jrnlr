@@ -59,7 +59,7 @@ function renderContent(content: any): React.ReactNode {
     // Paragraphs
     if (node.type === 'paragraph' || node.tag === 'p') {
       return (
-        <p key={key} className="mb-2">
+        <p key={key} className="mb-2 whitespace-pre-wrap">
           {kids}
         </p>
       )
@@ -146,7 +146,7 @@ export default function JournalEntryItem({ entry }: Props) {
 
         {'id' in entry && (
           <Button variant="ghost" size="sm" asChild>
-            <Link href={`/admin/collections/journal-entries/${entry.id}?redirect=/`}>Open</Link>
+            <Link href={`/journals/${entry.id}/edit`}>Open</Link>
           </Button>
         )}
       </CardHeader>

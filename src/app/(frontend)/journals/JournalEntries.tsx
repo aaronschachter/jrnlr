@@ -58,9 +58,7 @@ export default async function JournalEntries({ userId, journalIdFromSearch }: Pr
           />
 
           <Button asChild>
-            <Link
-              href={`/admin/collections/journal-entries/create?redirect=%2F${journalIdFromSearch ? `&journal=${encodeURIComponent(journalIdFromSearch)}` : ''}`}
-            >
+            <Link href={`/journals/new${journalIdFromSearch ? `?journal=${encodeURIComponent(journalIdFromSearch)}` : ''}`}>
               Create Entry
             </Link>
           </Button>
