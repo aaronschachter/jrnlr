@@ -103,6 +103,7 @@ export async function createJournalEntry(formData: FormData) {
   const journalId = String(formData.get('journal') || '')
   const dateLocal = (formData.get('date') as string) || ''
   const contentText = (formData.get('contentText') as string) || ''
+  const clientModal = String(formData.get('clientModal') || '') === '1'
 
   if (!journalId) throw new Error('Journal is required')
 
@@ -118,6 +119,9 @@ export async function createJournalEntry(formData: FormData) {
 
   revalidatePath('/')
   if (journalId) revalidatePath(`/?journal=${encodeURIComponent(journalId)}`)
+  if (clientModal) {
+    return { ok: true }
+  }
   redirect(journalId ? `/?journal=${encodeURIComponent(journalId)}` : '/')
 }
 

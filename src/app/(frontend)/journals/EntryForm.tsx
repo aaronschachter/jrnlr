@@ -1,4 +1,7 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
+import { useFormStatus } from 'react-dom'
 import MarkdownEditor from './MarkdownEditor'
 
 type JournalOption = { id: string; title: string }
@@ -8,12 +11,23 @@ export function EntryForm({
   initial,
   action,
   submitLabel = 'Save',
+  inDialog = false,
 }: {
   journals: JournalOption[]
   initial?: { id?: string; date?: string; journalId?: string; contentText?: string }
   action: (formData: FormData) => Promise<void>
   submitLabel?: string
+  inDialog?: boolean
 }) {
+  function SubmitBtn({ label }: { label: string }) {
+    const { pending } = useFormStatus()
+    return (
+      <Button type="submit" disabled={pending}>
+        {pending ? 'Saving…' : label}
+      </Button>
+    )
+  }
+
   // Format date string for datetime-local input
   const toLocalInput = (iso?: string) => {
     if (!iso) return ''
@@ -33,6 +47,7 @@ export function EntryForm({
 
   return (
     <form action={action} className="space-y-4">
+      {inDialog ? <input type="hidden" name="clientModal" value="1" /> : null}
       {initial?.id ? <input type="hidden" name="id" defaultValue={initial.id} /> : null}
 
       <div className="grid gap-1">
@@ -81,7 +96,7 @@ export function EntryForm({
       </div>
 
       <div className="pt-2">
-        <Button type="submit">{submitLabel}</Button>
+        <SubmitBtn label={submitLabel} />
       </div>
     </form>
   )

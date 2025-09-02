@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import JournalFilter from './JournalFilter'
 import JournalEntryItem from './JournalEntryItem'
+import QuickAddDialog from './QuickAddDialog'
 
 type Props = {
   userId: string
@@ -57,11 +58,13 @@ export default async function JournalEntries({ userId, journalIdFromSearch }: Pr
             selectedId={journalIdFromSearch}
           />
 
-          <Button asChild>
-            <Link href={`/journals/new${journalIdFromSearch ? `?journal=${encodeURIComponent(journalIdFromSearch)}` : ''}`}>
-              Create Entry
-            </Link>
-          </Button>
+          <QuickAddDialog
+            journals={journalsRes.docs.map((j) => ({
+              id: typeof j.id === 'string' ? j.id : String(j.id),
+              title: j.title,
+            }))}
+            selectedJournalId={journalIdFromSearch}
+          />
         </div>
       </div>
 
