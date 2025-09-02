@@ -37,7 +37,7 @@ function renderContent(content: any): React.ReactNode {
     if (!node) return null
 
     // Text leaf
-    if (typeof node.text === 'string') return <>{node.text}</>
+    if (typeof node.text === 'string') return <span key={key}>{node.text}</span>
 
     const kids = Array.isArray(node.children) ? renderNodes(node.children, key) : null
 
