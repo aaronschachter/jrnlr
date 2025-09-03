@@ -2,8 +2,6 @@ import { getPayload } from 'payload'
 import React from 'react'
 
 import config from '@/payload.config'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import JournalFilter from './JournalFilter'
 import JournalEntryItem from './JournalEntryItem'
 import QuickAddDialog from './QuickAddDialog'

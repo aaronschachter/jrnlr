@@ -34,7 +34,7 @@ export default function QuickAddDialog({
         return { ok: false, error: e instanceof Error ? e.message : 'Failed to save' }
       }
     },
-    { ok: false }
+    { ok: false },
   )
 
   useEffect(() => {
@@ -49,10 +49,12 @@ export default function QuickAddDialog({
       <DialogTrigger asChild>
         <Button>Create Entry</Button>
       </DialogTrigger>
+
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>New Journal Entry</DialogTitle>
         </DialogHeader>
+
         <EntryForm
           journals={journals}
           initial={{ journalId: selectedJournalId }}

@@ -4,7 +4,7 @@ import React from 'react'
 
 import config from '@/payload.config'
 import Link from 'next/link'
-import JournalEntries from './journals/JournalEntries'
+import JournalEntries from './journal-entries/JournalEntries'
 import { Button } from '@/components/ui/button'
 
 type PageProps = {
