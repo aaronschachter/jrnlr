@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, SquarePen } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -106,8 +106,8 @@ export default function JournalEntryItem({ entry }: Props) {
   const isJournalFiltered = Boolean(searchParams?.get('journal'))
 
   return (
-    <Card className="mb-3">
-      <CardHeader className="flex flex-row items-start justify-between gap-2">
+    <Card className="mb-3 group">
+      <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-2">
         <div className="flex items-start gap-2">
           <button
             type="button"
@@ -145,8 +145,15 @@ export default function JournalEntryItem({ entry }: Props) {
         </div>
 
         {'id' in entry && (
-          <Button variant="ghost" size="sm" asChild>
-            <Link href={`/journals/${entry.id}/edit`}>Open</Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            asChild
+          >
+            <Link href={`/journals/${entry.id}/edit`} aria-label="Edit entry">
+              <SquarePen className="h-4 w-4" />
+            </Link>
           </Button>
         )}
       </CardHeader>

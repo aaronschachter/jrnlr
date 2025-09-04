@@ -44,10 +44,10 @@ export default async function JournalEntries({ userId, journalIdFromSearch }: Pr
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-2 mb-3">
+      <div className="mb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <h2 className="text-lg font-semibold">Journals</h2>
 
-        <div className="flex items-center gap-2">
+        <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center">
           <JournalFilter
             journals={journalsRes.docs.map((j) => ({
               id: typeof j.id === 'string' ? j.id : String(j.id),

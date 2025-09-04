@@ -38,7 +38,7 @@ export default function JournalFilter({
       value={selectedId ?? ALL_VALUE}
       onValueChange={(val) => onValueChange(val === ALL_VALUE ? '' : val)}
     >
-      <SelectTrigger size="sm" className="w-48">
+      <SelectTrigger size="sm" className="w-full sm:w-48 max-w-full">
         <SelectValue placeholder="All journals" className="truncate" />
       </SelectTrigger>
 

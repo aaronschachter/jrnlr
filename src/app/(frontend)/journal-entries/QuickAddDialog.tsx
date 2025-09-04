@@ -47,7 +47,7 @@ export default function QuickAddDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Create Entry</Button>
+        <Button className="w-full sm:w-auto">Create Entry</Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-2xl">
