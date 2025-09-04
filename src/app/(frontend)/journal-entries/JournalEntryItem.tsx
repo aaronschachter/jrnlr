@@ -104,6 +104,7 @@ export default function JournalEntryItem({ entry }: Props) {
         : ''
 
   const isJournalFiltered = Boolean(searchParams?.get('journal'))
+  const editItemHref = `/admin/collections/journal-entries/${entry.id}?redirect=/`
 
   return (
     <Card className="mb-3 group">
@@ -129,6 +130,7 @@ export default function JournalEntryItem({ entry }: Props) {
                 year: 'numeric',
               })}
             </CardTitle>
+
             <CardDescription>
               {!isJournalFiltered && journalId ? (
                 <Link
@@ -151,7 +153,7 @@ export default function JournalEntryItem({ entry }: Props) {
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
             asChild
           >
-            <Link href={`/journals/${entry.id}/edit`} aria-label="Edit entry">
+            <Link href={editItemHref} aria-label="Edit entry">
               <SquarePen className="h-4 w-4" />
             </Link>
           </Button>
